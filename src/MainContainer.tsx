@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import SearchPokemon from './SearchPokemon';
-import CapturedPokemon from './CapturedPokemon';
 
 const useStyles = makeStyles({
     mainContainer: {
@@ -22,7 +21,6 @@ const MainContainer = () => {
         <Grid container className={classes.mainContainer}>
             <Grid container className={classes.subContainer}>
                 <SearchPokemon />
-                <CapturedPokemon />
             </Grid>
         </Grid>
     )
