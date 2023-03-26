@@ -154,6 +154,8 @@ const mockCapturedPokemon = [
 
 const releasePokemon = jest.fn();
 
+// would add a test for every component that the user can see/interact with if this was a production level application
+
 describe('CapturedPokemon component', () => {
     it('should render the captured pokemon images', async() => {
       const { getByTestId } = render(
