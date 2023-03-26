@@ -26,11 +26,12 @@ const DisplayCapturedPokemon: FC<CapturedPokemonProps> = ({
     releasePokemon
 }) => {
     const classes = useStyles();
+    console.log('capturedPokemon', capturedPokemon);
     return (
-        <Grid item direction="column" className={classes.centerContent}>
-            {capturedPokemon.map((pokemon) => {
+        <Grid item direction='column' className={classes.centerContent}>
+            {capturedPokemon.map((pokemon, index) => {
                 return (
-                    <Grid item onClick={() => releasePokemon(pokemon.uniqueId)}>
+                    <Grid key={index} item onClick={() => releasePokemon(pokemon.uniqueId)}>
                         <img src={pokemon.image} alt='front of pokemon' height='100px' width='100px'/>
                     </Grid>
                 )

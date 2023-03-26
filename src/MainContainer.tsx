@@ -8,7 +8,8 @@ import SearchPokemon from './SearchPokemon';
 const useStyles = makeStyles({
     mainContainer: {
         justifyContent: 'center',
-        padding: '2rem 10rem 1rem 10rem'
+        padding: '2rem 10rem 1rem 10rem',
+        color: 'white'
     },
     subContainer: {
         justifyContent: 'center',

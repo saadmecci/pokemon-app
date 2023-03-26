@@ -57,7 +57,7 @@ const DisplayPokemonInfo: FC<DisplayPokemonProps> = ({
                     <Table 
                         sx={{
                             [`& .${tableCellClasses.root}`]: {
-                            borderBottom: "none"
+                            borderBottom: 'none'
                             },
                             backgroundColor: '#CE3129'
                         }}
@@ -83,7 +83,7 @@ const DisplayPokemonInfo: FC<DisplayPokemonProps> = ({
             </Grid>
             <Grid container>
                 <Button 
-                    variant="contained"
+                    variant='contained'
                     sx={{
                         height: '3.4rem',
                         textTransform: 'none'

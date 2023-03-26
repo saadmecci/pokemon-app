@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import DisplayPokemonInfo from './DisplayPokemonInfo';
@@ -12,6 +12,7 @@ import { Pokemon } from './types';
 
 const useStyles = makeStyles({
     centerContent: {
+        minWidth: '50rem',
         justifyContent: 'center',
         backgroundColor: '#CE3129',
         padding: '1rem 1rem 1rem 1rem',
@@ -26,15 +27,18 @@ const SearchPokemon = () => {
     const classes = useStyles();
 
     const [userInput, setUserInput] = useState('');
-    const [pokemonToDisplay, setPokemonToDisplay] = useState<Pokemon | null>(null);
-    const [capturedPokemon, setCapturedPokemon] = useState<Pokemon[] | []>([]);
+    const [pokemonToDisplay, setPokemonToDisplay] = useState<Pokemon>();
+    const [capturedPokemon, setCapturedPokemon] = useState<Pokemon[]>([]);
+    const [isError, setIsError] = useState<Boolean>();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!userInput) {
+            setIsError(true);
+        }
         const pokemonToSearch = userInput.trim();
         axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonToSearch}`)
             .then((response) => {
-                console.log(response);
                 const { 
                     data: {
                         id,
@@ -59,6 +63,7 @@ const SearchPokemon = () => {
                     defense: defense,
                     speed: speed
                 })
+                setIsError(false);
             })
             .catch((error) => {
                 console.error(error);
@@ -68,37 +73,46 @@ const SearchPokemon = () => {
     }
 
     const capturePokemon = () => {
-        if (capturedPokemon.length < 6) {
+        if (pokemonToDisplay && capturedPokemon && capturedPokemon.length < 6) {
             setCapturedPokemon([...capturedPokemon, pokemonToDisplay]);
         }
     }
 
     const releasePokemon = (uniqueId: string) => {
-        const capturedPokemonCopy = [...capturedPokemon];
-        const pokemonToRelease = capturedPokemonCopy.find((pokemon) => pokemon.uniqueId === uniqueId);
-        const index = capturedPokemonCopy.indexOf(pokemonToRelease);
-        capturedPokemonCopy.splice(index, 1);
-        setCapturedPokemon(capturedPokemonCopy);
+        if (capturedPokemon) {
+            const capturedPokemonCopy = [...capturedPokemon];
+            const pokemonToRelease = capturedPokemonCopy.find((pokemon) => pokemon.uniqueId === uniqueId);
+            const index = capturedPokemonCopy.indexOf(pokemonToRelease!);
+            capturedPokemonCopy.splice(index, 1);
+            setCapturedPokemon(capturedPokemonCopy);
+        }
     }
 
     return (
         <Grid container>
             <Grid item className={classes.centerContent}>
                 <form onSubmit={handleSubmit}>
-                    <Grid container item>
+                    <Grid container item sx={{justifyContent: 'center'}}>
                         <Grid item>
                             <TextField 
-                                id="outlined-basic" 
-                                label="name/id" 
-                                variant="outlined"
+                                id='outlined-basic' 
+                                label='name/id' 
+                                variant='outlined'
                                 value={userInput}
                                 onChange={(e) => setUserInput(e.target.value)}
+                                sx={{
+                                    color: 'white',
+                                    marginRight: '1rem',
+                                }}
                             />
+                            {
+                                isError ? <Typography>Please enter a valid pokemon name</Typography> : null
+                            }
                         </Grid>
                         <Grid item>
                             <Button 
                                 type='submit'
-                                variant="contained"
+                                variant='contained'
                                 sx={{
                                     height: '3.4rem',
                                     textTransform: 'none'
@@ -116,7 +130,7 @@ const SearchPokemon = () => {
                     /> 
                 : null}
             </Grid>
-            {capturedPokemon.length ? 
+            {capturedPokemon?.length ? 
                 <DisplayCapturedPokemon 
                     capturedPokemon={capturedPokemon}
                     releasePokemon={releasePokemon}
